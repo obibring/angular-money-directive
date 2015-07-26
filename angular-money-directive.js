@@ -140,6 +140,20 @@ angular.module('fiestah.money', [])
         return value ? formatPrecision(value) : value;
       });
 
+      ngModelCtrl.$render = function() {
+        precision = precision || attrs.precision;
+        var viewValue = ngModelCtrl.$viewValue;
+        var modelValue = ngModelCtrl.$modelValue;
+        var isEmpty = ngModelCtrl.$isEmpty;
+        if (!isEmpty(modelValue)) {
+          el.val(formatPrecision(modelValue));
+        } else if (!isEmpty(viewValue) && angular.isNumber(viewValue)) {
+          el.val(formatPrecision(viewValue));
+        } else if (!isEmpty(viewValue)) {
+          el.val(viewValue);
+        }
+      }
+
       // Auto-format precision on blur
       el.bind('blur', function () {
         var value = ngModelCtrl.$modelValue;
