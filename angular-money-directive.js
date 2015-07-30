@@ -127,7 +127,7 @@ angular.module('fiestah.money', [])
       });
 
       ngModelCtrl.$parsers.push(function (value) {
-        if (value) {
+        if (angular.isNumber(value) && !isNaN(value)) {
           // Save with rounded value
           lastValidValue = round(value);
 
@@ -145,10 +145,10 @@ angular.module('fiestah.money', [])
         var viewValue = ngModelCtrl.$viewValue;
         var modelValue = ngModelCtrl.$modelValue;
         var isEmpty = ngModelCtrl.$isEmpty;
-        if (!isEmpty(modelValue)) {
-          el.val(formatPrecision(modelValue));
-        } else if (!isEmpty(viewValue) && angular.isNumber(viewValue)) {
+        if (!isEmpty(viewValue) && angular.isNumber(viewValue)) {
           el.val(formatPrecision(viewValue));
+        } else if (!isEmpty(modelValue)) {
+          el.val(formatPrecision(modelValue));
         } else if (!isEmpty(viewValue)) {
           el.val(viewValue);
         }
@@ -157,7 +157,7 @@ angular.module('fiestah.money', [])
       // Auto-format precision on blur
       el.bind('blur', function () {
         var value = ngModelCtrl.$modelValue;
-        if (value) {
+        if (angular.isNumber(value) && !isNaN(value)) {
           ngModelCtrl.$viewValue = formatPrecision(value);
           ngModelCtrl.$render();
         }
